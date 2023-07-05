@@ -69,7 +69,7 @@ $this->load->library('datatables_server_side', [
   'group_by' => ['table1.column1']  // GROUP BY clause for table1.column1
 ]);
 
-$this->datatables_server_side->process($params);
+$this->datatables_server_side->process();
 ```
 
 ## Contributing
