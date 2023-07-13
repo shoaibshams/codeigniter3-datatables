@@ -215,6 +215,10 @@ class Datatables_server_side
 		$likes = [];
 
 		foreach ($this->request['columns'] as $column) {
+			if (empty($column['name'])) {
+				continue;
+			}
+
 			if ($column['searchable'] === 'true') {
 				if (empty($global_search_value) === false) {
 					$likes[] = array(
