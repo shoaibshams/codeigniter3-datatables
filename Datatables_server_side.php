@@ -319,9 +319,11 @@ class Datatables_server_side
 
 		$this->joins();
 
+		$this->group();
+
 		$this->CI->db->from($this->table);
 
-		return $this->CI->db->count_all_results();
+		return $this->CI->db->get()->num_rows();
 	}
 
 	// --------------------------------------------------------------------
@@ -341,9 +343,11 @@ class Datatables_server_side
 
 		$this->search();
 
+		$this->group();
+
 		$this->CI->db->from($this->table);
 
-		return $this->CI->db->count_all_results();
+		return $this->CI->db->get()->num_rows();
 	}
 
 	// --------------------------------------------------------------------
