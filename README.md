@@ -92,25 +92,9 @@ public function method($param = null)
 ```
 <script>
   $(window).on('load', function() {
-		// Setup - add a text input to each footer cell
-		$('#server_side_dt tfoot th').each( function () {
-			var title = $(this).text();
-			if (title === '') return;
-			$(this).html( '<input class="form-control" type="text" placeholder="'+title+'" />' );
-		});
-
 		$('#server_side_dt').DataTable({
-			columnDefs: [
-				{ className: "montserrat-bold text-center font-14", "targets": [ 1 ] },
-				{ className: "montserrat text-center font-14", "targets": [ 0 ] },
-				{ className: "text-right", "targets": [ 2, 3, 4, 5, 6 ] }
-			],
 			processing: true,
 			serverSide: true,
-			language: {
-				search: "Search:",
-				processing: '<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span> '
-			},
 			ajax: "<?= site_url("Controller/method"); ?>", // 'Controller/method/param'
 			columns:[
 				{data: 0},
@@ -121,36 +105,9 @@ public function method($param = null)
 								</a>`;
 					}
 				},
-				{data: 1},
-				{data: 2},
-				{data: 3},
-				{data: 4},
-				{data: 5},
-				{data: 6}
+				{data: 1}
 			],
 			"order": [[0, "DESC"]],
-			drawCallback: function( settings, json ) {
-				$('#server_side_dt thead th, #server_side_dt tfoot th').removeClass('montserrat montserrat-bold'); // If you want to remove some class after append all dataTable.
-			},
-			rowCallback: function (nRow, aData, iDisplayIndex) {
-				var oSettings = this.fnSettings ();
-				$("td:first", nRow).html(oSettings._iDisplayStart+iDisplayIndex +1);
-				return nRow;
-			},
-			initComplete: function () {
-				// Apply the search
-				this.api().columns().every( function () {
-					var that = this;
-
-					$( 'input', this.footer() ).on( 'keyup change clear', function () {
-						if ( that.search() !== this.value ) {
-							that
-								.search( this.value )
-								.draw();
-						}
-					} );
-				} );
-			}
 		});
 	});
 </script>
