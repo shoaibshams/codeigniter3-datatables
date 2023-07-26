@@ -50,26 +50,67 @@ where: A WHERE clause to filter the data (optional).
 joins: An array of JOIN statements (optional).
 group_by: An array of column names to group by (optional).
 
-## Example:
+## Controller Example:
 
 ```php
-// Load the 'datatables_server_side' library
-$this->load->library('datatables_server_side', [
-  'table' => 'table1',  // The name of the main table
-  'primary_key' => 'id',  // The primary key column of the main table
-  'columns' => ['table1.column1', 'table2.column2'],  // The columns to fetch from the main table and table2
-  'where' => [
-    'table1.column1' => 'value1',  // WHERE condition for table1.column1
-    'table2.column2' => 'value2'   // WHERE condition for table2.column2
-  ],
-  'joins' => [
-    ['table2', 'table1.column = table2.column', 'left'],  // LEFT JOIN with table2 on column equality
-    ['table3', 'table1.column = table3.column', 'inner']  // INNER JOIN with table3 on column equality
-  ],
-  'group_by' => ['table1.column1']  // GROUP BY clause for table1.column1
-]);
+public function method($param = null)
+{
+  // If you have optional parameters for where clause. 
+  $where = [];
+  if ($param != null) {
+    $where = ['table.column' => $param];
+  }
+  // Load the 'datatables_server_side' library
+  $this->load->library('datatables_server_side', [
+    'table' => 'table1',  // The name of the main table
+    'primary_key' => 'id',  // The primary key column of the main table
+    'columns' => ['table1.column1', 'table2.column2'],  // The columns to fetch from the main table and table2
+    'where' => array_merge($where, [
+				'table1.column1' => 'value1',  // WHERE condition for table1.column1
+        'table2.column2' => 'value2'   // WHERE condition for table2.column2
+		]),
+    'joins' => [
+      ['table2', 'table1.column = table2.column', 'left'],  // LEFT JOIN with table2 on column equality
+      ['table3', 'table1.column = table3.column', 'inner']  // INNER JOIN with table3 on column equality
+    ],
+    'group_by' => ['table1.column1']  // GROUP BY clause for table1.column1
+  ]);
 
-$this->datatables_server_side->process();
+  $this->datatables_server_side->process();
+}
+```
+
+## View Example:
+### HTML
+
+```
+<tbody id="server_side_dt"></tbody>
+```
+
+### jQuery
+
+```
+<script>
+  $(window).on('load', function() {
+		$('#server_side_dt').DataTable({
+			processing: true,
+			serverSide: true,
+			ajax: "<?= site_url("Controller/method"); ?>", // 'Controller/method/param'
+			columns:[
+				{data: 0},
+				{
+					data: 0, render: function (id, type, row) {
+						return `<a href="<?= site_url("Controller/method/"); ?>${id}" target="_blank">
+									${id}
+								</a>`;
+					}
+				},
+				{data: 1}
+			],
+			"order": [[0, "DESC"]],
+		});
+	});
+</script>
 ```
 
 ## Contributing
