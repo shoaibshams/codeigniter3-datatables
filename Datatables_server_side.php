@@ -473,13 +473,13 @@ class Datatables_server_side
 	 */
 	private function get_table_name(string $column): string
 	{
-		// Remove any backticks or single quotes from the variable
-		$column = str_replace(array("`", "'"), "", $column);
+		// Remove any backticks, single quotes or DISTINCT keyword from the variable
+		$column = str_replace(array("`", "'", 'DISTINCT'), "", $column);
 
 		// Check if the variable contains parentheses
 		if (preg_match("/\((.*?)\)/", $column, $matches)) {
 			// Extract the part inside the parentheses
-			$column = $matches[1];
+			$column = trim($matches[1]);
 		}
 
 		// Split the variable by spaces or dots
