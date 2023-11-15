@@ -163,7 +163,7 @@ class Datatables_server_side
 	 */
 	private function validate_request()
 	{
-		if (count($this->request['columns']) !== count($this->columns)) {
+		if (count($this->request['columns']) > count($this->columns)) {
 			$this->response(array(
 				'error' => 'Column count mismatch.'
 			));
