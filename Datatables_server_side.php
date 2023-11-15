@@ -137,6 +137,13 @@ class Datatables_server_side
 	private function validate_columns()
 	{
 		foreach ($this->columns as $column_name) {
+			/**
+			 * skiping sub query
+			 */
+			if ($column_name[0] == '(') {
+				continue;
+			}
+
 			$column = $this->get_column_name($column_name);
 			$table = $this->get_table_name($column_name);
 
@@ -145,6 +152,7 @@ class Datatables_server_side
 			}
 		}
 	}
+
 
 	// --------------------------------------------------------------------
 
